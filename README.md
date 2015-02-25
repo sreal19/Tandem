@@ -29,3 +29,4 @@ Success will be if no errors are displayed after the import command.
 Get out Python by CTl-D
 
 GETTING AND RUNNING TANDEM CODE
+Just press the Download Zip button at the right side of the page listing the files.
