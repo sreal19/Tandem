@@ -1,0 +1,43 @@
+DH Praxis Technology Log
+Week 1
+Made tentative decision to go with Python 3.4
+Python 2.7 already installed
+Python 3.4 already installed
+PyCharm IDE already installed
+
+PYJAMAS PACKAGE
+I dowloaded pyjamas package with the intent in order to use it as our GUI/Web front end 
+per a suggestion made by Chris.
+Though I had previously installed a couple of other GUI packages (tkinter and PyQT),
+I successfully downloaded pyjamas source from pyjs.org. The installation required 
+Unix command line and though I struggled, I got it to apparently install on my 2.7
+Python environment. I say apparently because I did not have an easy way to test it.
+However I could not install on 3.4 environment.
+
+In consultation with two of the Digital Fellows, I revised my plan to use Python 3.4 and
+switched to 2.7, uninstalling all 3.4 folders and files.
+
+INSTALL FEATURE EXTRACTOR
+code.google.com/p/softwarestudies/w/list is the SoftwareStudies wiki.
+Click the Installation link
+This installation requires pre installing XCode and MacPorts.
+I did those installs on my desktop and laptop and then followed the step by step 
+instructions for installing Feature Extractor.
+
+Got stuck when it came to Matlab. License required.
+##Also test is not finding CASCRIPt
+
+NLTK
+
+
+QTip
+DMG
+
+XCode
+DMG?
+
+Homebrew
+
+XQuartz
+DMG
+

@@ -1,0 +1,7 @@
+glibtool instead of libtool
+
+using this site to build apache local host
+http://www.websightdesigns.com/posts/view/how-to-set-up-a-local-web-server-with-homebrew-on-mac-os-x-10-9
+
+I did the install steps, but not the configure steps because they were talking about php
+I did all the Starting Apache steps
