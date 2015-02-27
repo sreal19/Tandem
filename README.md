@@ -30,3 +30,12 @@ Get out Python by CTl-D
 
 GETTING AND RUNNING TANDEM CODE
 Just press the Download Zip button at the right side of the page listing the files.
+
+TESSERACT SETUP
+I followed these instructions. https://code.google.com/p/python-tesseract/wiki/HowToCompileForHomebrewMac
+They are pretty nasty so take your time.
+
+
+RUUNNING OCRTEST.PY
+The program is hardcoded to take an input file called tessy.png and write the output to file called tessyout.txt in a subdirectory called tessyout. So make sure you have all the files and directories in place before you run the code.
+
