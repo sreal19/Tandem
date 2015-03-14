@@ -12,8 +12,15 @@ import csv
 import pytesseract
 from PIL import Image
 import os
-import glob
+from cStringIO import StringIO
+from pdfminer.converter import TextConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfinterp import PDFResourceManager
+from pdfminer.pdfinterp import PDFPageInterpreter
+from pdfminer.pdfpage import PDFPage
+
 from nltk.corpus import PlaintextCorpusReader
+
 
 #function captures location of image files
 def get_input_folder():
@@ -33,25 +40,53 @@ def process_image(file):
     return output_data
 
 #run the Tesseract OCR engine using the helper function process_image()
-def ocrit(file):
-    print ("Processing " + file)
-    fullpath = infolder + file
+def ocrit(fullpath, file):
     ofile = os.path.splitext(file)[0]
-    outfile = infolder + outfolder + '/' + ofile + '.txt'
+    outfile = outpath + outfolder + '/' + ofile + '.txt'
     temp = open(outfile, 'w')
     temp.write (str(process_image(fullpath)))
     temp.close()
 
-def make_ocr_folder(x):
-    outname = 'corpus'
+def pdfconvert(fullpath, file, pages=None):
+    if not pages:
+        pagenums = set()
+    else:
+        pagenums = set(pages)
+
+
+    output = StringIO()
+    manager = PDFResourceManager()
+    converter = TextConverter(manager, output, laparams=LAParams())
+    interpreter = PDFPageInterpreter(manager, converter)
+
+    infile = open(fullpath, 'rb')
+    for page in PDFPage.get_pages(infile, pagenums):
+        interpreter.process_page(page)
+    infile.close()
+    converter.close()
+
+    ofile = os.path.splitext(file)[0]
+    outfile = outpath + outfolder + '/' + ofile + '.txt'
+    text = output.getvalue()
+    output.close
+
+    temp = open(outfile, 'w')
+    temp.write (text)
+    temp.close()
+
+
+
+def make_corpus_folder(x):
+    outname = 'ocrout_corpus'
     count = 1
     while True:
         try:
             os.mkdir(x + outname)
             break
         except(OSError):
-            outname = 'corpus' + str(count)
+            outname = 'ocrout_corpus' + str(count)
             count += 1
+            print x + outname
     return outname
 
 #capture the folder that contains image files.
@@ -60,7 +95,8 @@ while good_input == False:
     infolder = get_input_folder()
 
 #create the output folder
-outfolder = make_ocr_folder(infolder)
+outpath = '/Users/sbr/nltk_data/corpora/'
+outfolder = make_corpus_folder(outpath)
 
 #loop through the user's input folder and find image files
 #for testing purposes only work with PNG files now
@@ -71,15 +107,19 @@ print
 
 files = [ f for f in os.listdir(infolder) if os.path.isfile(os.path.join(infolder,f)) ]
 for file in files:
+    print ("Processing " + file)
+    fullpath = infolder + file
     if os.path.splitext(file)[1] == '.tiff':
-        ocrit(file)
+        ocrit(fullpath, file)
         outcount += 1
     elif os.path.splitext(file)[1] == '.jpg':
-        ocrit(file)
+        ocrit(fullpath, file)
         outcount += 1
     elif os.path.splitext(file)[1] == '.png':
-        ocrit(file)
+        ocrit(fullpath, file)
         outcount += 1
+    elif os.path.splitext(file)[1] == '.pdf':
+        pdfconvert(fullpath, file)
     else:
        print
        print (file + " is not an image file. Skipped... ")
