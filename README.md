@@ -1,7 +1,21 @@
 # Tandem
 DH Project to analyze text and images in one interface
 
-PYTHON SETUP
+TandemText.py takes input from the use to identify a folder containing one or more image 
+files. The program processes all of the image files through the Tesseract OCR engine and 
+outputs TXT files in the NLTK DATA folder
+
+Nltktest2 is under development and can generate basic statistics on a hardcoded TXT file.
+It will be expanded to generate additional stats and to loop through the folder containing
+TandemText output. Statistics will be written to a CSV file and/or a SQLlite DB
+
+Flaskr
+Is a sample program to exercise the Flask web framework for Python.
+
+
+
+
+SETUP
 Mac's come with Python. I would suggest you work with that version unless issues arise.
 
 XCOCDE
@@ -35,7 +49,4 @@ TESSERACT SETUP
 I followed these instructions. https://code.google.com/p/python-tesseract/wiki/HowToCompileForHomebrewMac
 They are pretty nasty so take your time.
 
-
-RUNNING OCRTEST.PY
-The program is hardcoded to take an input file called tessy.png and write the output to file called tessyout.txt in a subdirectory called tessyout. So make sure you have all the files and directories in place before you run the code.
 
