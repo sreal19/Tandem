@@ -101,6 +101,7 @@ def make_corpus_folder(x):              #Create a folder for the OCR Output/NLTK
 ***********************************************'''
 
 def tokenize_file(file):            #tokenize input file, count words, characters, remove stopwords
+    global english_stops
     tokenizer = RegexpTokenizer(r'\w+')
     item_count = 0
     total_chars = 0
@@ -118,7 +119,7 @@ def tokenize_file(file):            #tokenize input file, count words, character
         item_count += 1
         for word in word_tokens:
             wordlist.append(word)
-    stopsout = [word for word in wordlist if word not in english_stops]
+    stopsout = [word for word in wordlist if word.lower() not in english_stops]
     return wordlist, stopsout, word_count, total_chars
 
 def build_sorted_ascii(wordlist):       #convert to ascii, lowercase and sort
@@ -138,7 +139,6 @@ def build_unique_dictionary(inlist):        #find unique words and count them
     o = 0
 
     for i in range(1, len(inlist)):
-        #print unique[o]
         if inlist[i].lower() == unique[o]:
             countlist[o] += 1
         else:
@@ -151,7 +151,6 @@ def build_unique_dictionary(inlist):        #find unique words and count them
 def write_first_row(outname):               #write the first row of the main output file
     global outputopen, file, resultspath
 
-    print outname
     with open(outname, 'wb') as csvfile:
             tandemwriter = csv.writer(csvfile, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
@@ -159,7 +158,6 @@ def write_first_row(outname):               #write the first row of the main out
                                    'Unique Word Count', 'Count without Stopword'])
             tandemwriter.writerow([file]+[allcount]+[allchar]+[avg_word_length]+[len(unique_nonstop_words)]+
                                   [len(nonstops)])
-
     outputopen = True
     write_the_lists()
 
@@ -233,8 +231,8 @@ for file in files:
 print "\n", "starting nltk process ", "\n"
 
 #container = nltk.data.load('corpora/ocrout_corpus2/BookScanCenter_9.txt',format='raw')
-tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-english_stops = set(stopwords.words('english'))
+#tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+english_stops = stopwords.words('english')
 corpus_root = outfolder
 
 files = [ f for f in os.listdir(corpus_root) if os.path.isfile(os.path.join(corpus_root,f)) ]
