@@ -10,6 +10,7 @@ import csv
 import pytesseract
 from PIL import Image
 import os
+import sys
 from cStringIO import StringIO
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
@@ -45,8 +46,8 @@ def get_input_folder():         #Capture location of user's image files
         print ("Folder does not exist!")
 
 def process_image(file):            #helper function to OCR a singe file
-    input_image = Image.open(file)
-    input_image= input_image.convert('RGB')
+    input_image = (Image.open(file)).convert('RGB')
+  #  input_image = input_image.convert('RGB')
     output_data = pytesseract.image_to_string(input_image)
     return output_data
 
@@ -91,7 +92,12 @@ def make_corpus_folder(x):              #Create a folder for the OCR Output/NLTK
         except(OSError):
             outname = 'ocrout_corpus' + str(count)
             count += 1
-            print "could not create folder ", x + outname, "...retrying..."
+            if count > 10:
+                outname = ''
+                print "Aborting. Failed to create output folder!"
+                sys.exit(9999)
+            else:
+                print "could not create folder ", x + outname, "...retrying..."
     return outname
 
 '''***********************************************
@@ -149,17 +155,17 @@ def build_unique_dictionary(inlist):        #find unique words and count them
     return unique, countlist
 
 def write_first_row(outname):               #write the first row of the main output file
-    global outputopen, file, resultspath
-
+    global file, resultspath, outputopen, goflag
+    print outname
     with open(outname, 'wb') as csvfile:
-            tandemwriter = csv.writer(csvfile, delimiter=',',
-                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            tandemwriter.writerow(['File','Total Word Count', 'Total Characters', 'Average Word Length',
-                                   'Unique Word Count', 'Count without Stopword'])
-            tandemwriter.writerow([file]+[allcount]+[allchar]+[avg_word_length]+[len(unique_nonstop_words)]+
-                                  [len(nonstops)])
-    outputopen = True
-    write_the_lists()
+        tandemwriter = csv.writer(csvfile, delimiter=',',
+                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        tandemwriter.writerow(['File','Total Word Count', 'Total Characters', 'Average Word Length',
+                   'Unique Word Count', 'Count without Stopword'])
+        tandemwriter.writerow([file]+[allcount]+[allchar]+[avg_word_length]+[len(unique_nonstop_words)]+
+                      [len(nonstops)])
+        outputopen = True
+        write_the_lists()
 
 def write_the_rest(outname):                #write subsequent rows of main output file
     global file
@@ -239,7 +245,10 @@ files = [ f for f in os.listdir(corpus_root) if os.path.isfile(os.path.join(corp
 for file in files:
     if os.path.splitext(file)[1] == '.txt':
         allwords, nonstops, allcount, allchar = tokenize_file(file)
-        avg_word_length = round(float(allchar)/float(allcount), 2)
+        if allcount == 0:
+            avg_word_length = 'na'
+        else:
+            avg_word_length = round(float(allchar)/float(allcount), 2)
         ascii_sorted = []
         ascii_sorted = build_sorted_ascii(allwords)
         nonstop_sorted = []
