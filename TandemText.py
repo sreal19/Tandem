@@ -6,7 +6,6 @@ Follow CVDH4 and SBReal on Twitter and Github
 DH Praxis 14-15 CUNY Graduate Center
 '''
 
-import csv
 import pytesseract
 from PIL import Image
 import os
@@ -243,6 +242,7 @@ corpus_root = outfolder
 
 files = [ f for f in os.listdir(corpus_root) if os.path.isfile(os.path.join(corpus_root,f)) ]
 for file in files:
+    print file
     if os.path.splitext(file)[1] == '.txt':
         allwords, nonstops, allcount, allchar = tokenize_file(file)
         if allcount == 0:
@@ -253,7 +253,11 @@ for file in files:
         ascii_sorted = build_sorted_ascii(allwords)
         nonstop_sorted = []
         nonstop_sorted = build_sorted_ascii(nonstops)
-        unique_nonstop_words, nonstop_counts  = build_unique_dictionary(nonstop_sorted)
+        if len(nonstop_sorted) > 0:
+            unique_nonstop_words, nonstop_counts  = build_unique_dictionary(nonstop_sorted)
+        else:
+            unique_nonstop_words = []
+            nonstop_counts = []
 
         #write the results of nltk process to csv files
         resultspath = './'
