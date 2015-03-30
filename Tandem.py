@@ -10,7 +10,7 @@ import pytesseract
 from PIL import Image
 import os
 import cv2
-import PyPDF2
+#import PyPDF2
 from cStringIO import StringIO
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
