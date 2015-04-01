@@ -179,10 +179,11 @@ def build_unique_list(inlist):        #find unique words and count them
     return unique, countlist
 
 def merge_all(folder):
+    txtfiles = [ f for f in os.listdir(folder) if os.path.isfile(os.path.join(folder,f)) ]
     wholebook = folder + '/Tandem' + 'AllText.txt'
     print "wholebook=", wholebook
     with open(wholebook, 'w') as outfile:
-        for file in files:
+        for file in txtfiles:
             print "merging", file
             fullname = folder + '/'+ file
             if os.path.splitext(file)[1] == '.txt':
@@ -251,8 +252,8 @@ outcount = 1
 print "\n", "processing image files in " + infolder, "\n"
 
 
-files = [ f for f in os.listdir(infolder) if os.path.isfile(os.path.join(infolder,f)) ]
-for file in files:
+infiles = [ f for f in os.listdir(infolder) if os.path.isfile(os.path.join(infolder,f)) ]
+for file in infiles:
     print ("Processing " + file)
     infullpath = infolder + file
     infilename = os.path.splitext(file)[0]
@@ -285,8 +286,8 @@ print "\n", "starting nltk process ", "\n"
 english_stops = stopwords.words('english')
 corpus_root = corpusfolder
 
-files = [ f for f in os.listdir(corpus_root) if os.path.isfile(os.path.join(corpus_root,f)) ]
-for file in files:
+corpfiles = [ f for f in os.listdir(corpus_root) if os.path.isfile(os.path.join(corpus_root,f)) ]
+for file in corpfiles:
     if os.path.splitext(file)[1] == '.txt':
         allwords, nonstops, allcount, allchar = tokenize_file(file)
         if allcount == 0:
